@@ -5,7 +5,7 @@ After=network.target cjdns-loadmodules.service
 Requires=cjdns-loadmodules.service
 
 [Service]
-User={{ cjdns_user }}
+User={{ cjdns_owner }}
 Group={{ cjdns_group }}
 ProtectHome=true
 ProtectSystem=true

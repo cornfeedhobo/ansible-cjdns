@@ -14,7 +14,7 @@ Role Variables
 | `cjdns_package_state` | `"present"` |
 | `cjdns_packages` | `"{{ __cjdns_packages }}"` |
 | `cjdns_configure` | `false` |
-| `cjdns_user` | `"{{ __cjdns_user }}"` |
+| `cjdns_owner` | `"{{ __cjdns_owner }}"` |
 | `cjdns_group` | `"{{ __cjdns_group }}"` |
 | `cjdns_service` | `false` |
 | `cjdns_service_name` | `"{{ __cjdns_service_name }}"` |

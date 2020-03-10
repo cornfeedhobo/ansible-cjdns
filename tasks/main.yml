@@ -8,10 +8,9 @@
 - name: "Ensure cjdns is installed"
   become: true
   yum:
-    name: "{{ item }}"
+    name: "{{ cjdns_packages | list }}"
     state: "{{ cjdns_package_state }}"
   tags: ["cjdns", "cjdns-install"]
-  with_items: "{{ cjdns_packages | list }}"
 
 
 - name: "Configure cjdns"
@@ -20,7 +19,7 @@
     src: "cjdroute.conf.j2"
     dest: "/etc/cjdroute.conf"
     backup: "yes"
-    owner: "{{ cjdns_user }}"
+    owner: "{{ cjdns_owner }}"
     group: "{{ cjdns_group }}"
     mode: "0640"
   tags: ["cjdns", "cjdns-configure"]
@@ -47,4 +46,40 @@
     state: "{{ cjdns_service_state }}"
     enabled: "{{ cjdns_service_enabled }}"
     daemon_reload: "{{ _cjdns_service_file.changed | ternary('yes', 'no') }}"
+  when: "cjdns_service"
   tags: ["cjdns", "cjdns-service"]
+
+
+- name: "Manage cjdns service restart service"
+  become: true
+  copy:
+    src: "cjdns-restart.service"
+    dest: "/etc/systemd/system/cjdns-restart.service"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "_cjdns_restart_service_file"
+  when: "cjdns_service and cjdns_restart_timer"
+  tags: ["cjdns", "cjdns-service"]
+
+- name: "Manage cjdns service restart timer"
+  become: true
+  copy:
+    src: "cjdns-restart.timer"
+    dest: "/etc/systemd/system/cjdns-restart.timer"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "_cjdns_restart_service_timer"
+  when: "cjdns_service and cjdns_restart_timer"
+  tags: ["cjdns", "cjdns-service"]
+
+- name: "Manage cjdns restart timer"
+  become: true
+  service:
+    name: "{{ cjdns_restart_timer_name }}"
+    enabled: "{{ cjdns_restart_timer_enabled }}"
+    daemon_reload: "{{ (_cjdns_restart_service_file.changed or _cjdns_restart_service_timer.changed) | ternary('yes', 'no') }}"
+  when: "cjdns_service and cjdns_restart_timer"
+  tags: ["cjdns", "cjdns-service"]
+

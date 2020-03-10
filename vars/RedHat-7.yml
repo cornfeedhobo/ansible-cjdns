@@ -5,7 +5,10 @@ __cjdns_packages:
   - "cjdns-tools"
   - "cjdns-selinux"
 
-__cjdns_user: "cjdns"
+__cjdns_owner: "cjdns"
+
 __cjdns_group: "cjdns"
 
 __cjdns_service_name: "cjdns"
+
+__cjdns_restart_timer_name: "cjdns-restart"

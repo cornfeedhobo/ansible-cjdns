@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart cjdns.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl try-restart cjdns.service
