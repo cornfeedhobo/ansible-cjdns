@@ -82,4 +82,3 @@
     daemon_reload: "{{ (_cjdns_restart_service_file.changed or _cjdns_restart_service_timer.changed) | ternary('yes', 'no') }}"
   when: "cjdns_service and cjdns_restart_timer"
   tags: ["cjdns", "cjdns-service"]
-
